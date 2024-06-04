@@ -1,17 +1,15 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons } from "@expo/vector-icons";
-import HomeScreen from "../screens/HomeScreen";
-import AccountScreen from "../screens/AccountScreen";
+import { Octicons } from "@expo/vector-icons";
+import HomeScreen from "../screens/Home";
+import AccountScreen from "../screens/Account";
 import { Platform } from "react-native";
+import colors from "../constants/colors";
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = "Home";
 
-const BottomTabNavigator = ({ navigation, route }) => {
-    React.useLayoutEffect(() => {
-        navigation.setOptions({ headerTitle: getHeaderTitle(route) });
-      }, [navigation, route]);
+const BottomTabNavigator = () => {
 
   return (
     <BottomTab.Navigator
@@ -21,17 +19,18 @@ const BottomTabNavigator = ({ navigation, route }) => {
           let iconName;
 
           if (route.name === "home") {
-            iconName = focused ? "home" : "home-outline";
+            iconName = "home";
           } else if (route.name === "account") {
-            iconName = focused ? "person" : "person-outline";
+            iconName = focused ? "person-fill" : "person";
           }
 
-          return <Ionicons name={iconName} size={size} color={color} />;
+          return <Octicons name={iconName} size={size} color={color} />;
         },
         tabBarStyle: Platform.OS !== "ios" && { height: 55 },
-        tabBarShowLabel: false,
-        tabBarActiveTintColor: "tomato",
-        tabBarInactiveTintColor: "gray",
+        tabBarActiveTintColor: colors.tabIconSelected,
+        tabBarInactiveTintColor: colors.tabIconDefault,
+        headerTintColor: colors.tabIconSelected,
+        headerShown:false,
       })}
     >
       <BottomTab.Screen name="home" component={HomeScreen} />
@@ -40,15 +39,3 @@ const BottomTabNavigator = ({ navigation, route }) => {
   );
 };
 export default BottomTabNavigator;
-
-function getHeaderTitle(route) {
-  const routeName =
-    route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
-
-  switch (routeName) {
-    case "Home":
-      return "How to get started";
-    case "Link":
-      return "Links to learn more";
-  }
-}
